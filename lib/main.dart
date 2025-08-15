@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:week_10_flutter/sliders.dart';
+import 'package:week_10_flutter/switch.dart';
 import 'package:week_10_flutter/textfiled.dart';
 import 'package:week_10_flutter/themes/themes.dart';
 
@@ -140,6 +141,14 @@ class HomePage extends StatelessWidget {
                   MaterialPageRoute(builder: (ctx) => FormScreen()),
                 ),
                 child: Text("Go to Text Fields Example Page"),
+              ),
+
+              ElevatedButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (ctx) => SwitchScreen()),
+                ),
+                child: Text("Go to Switch Example Page"),
               ),
             ],
           ),
