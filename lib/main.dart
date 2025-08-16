@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:week_10_flutter/checkbox.dart';
+import 'package:week_10_flutter/datepicker.dart';
 import 'package:week_10_flutter/sliders.dart';
 import 'package:week_10_flutter/switch.dart';
 import 'package:week_10_flutter/textfiled.dart';
@@ -149,6 +151,20 @@ class HomePage extends StatelessWidget {
                   MaterialPageRoute(builder: (ctx) => SwitchScreen()),
                 ),
                 child: Text("Go to Switch Example Page"),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (ctx) => CheckBoxExamplePage()),
+                ),
+                child: Text("Go to Checkbox Example Page"),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (ctx) => DatePickerPage()),
+                ),
+                child: Text("Go to DatePicker Example Page"),
               ),
             ],
           ),

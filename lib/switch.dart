@@ -75,7 +75,6 @@ class _SwitchScreenState extends State<SwitchScreen> {
                 ),
                 subtitle: Text(switchC ? "On" : "Off"),
               ),
-              
             ],
           ),
         ),
