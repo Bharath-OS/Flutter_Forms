@@ -164,7 +164,7 @@ class HomePage extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (ctx) => DatePickerPage()),
                 ),
-                child: Text("Go to DatePicker Example Page"),
+                child: Text("Go to Time and Date picker Example Page"),
               ),
             ],
           ),
