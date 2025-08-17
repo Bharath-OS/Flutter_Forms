@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:week_10_flutter/checkbox.dart';
 import 'package:week_10_flutter/datepicker.dart';
+import 'package:week_10_flutter/profile.dart';
 import 'package:week_10_flutter/sliders.dart';
 import 'package:week_10_flutter/switch.dart';
 import 'package:week_10_flutter/textfiled.dart';
@@ -165,6 +166,13 @@ class HomePage extends StatelessWidget {
                   MaterialPageRoute(builder: (ctx) => DatePickerPage()),
                 ),
                 child: Text("Go to Time and Date picker Example Page"),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (ctx) => ProfilePage()),
+                ),
+                child: Text("Go to Profile Page"),
               ),
             ],
           ),
