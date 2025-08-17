@@ -8,15 +8,17 @@ class DropDownPage extends StatefulWidget {
 }
 
 class _DropDownPageState extends State<DropDownPage> {
-  // List<String> items = ['item1', 'item2', 'item3', 'item4'];
-  // late String selected;
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   selected = items[0];
-  // }
+  List<String> items = ['item1', 'item2', 'item3', 'item4'];
+  late String selected;
+  @override
+  void initState() {
+    super.initState();
+    selected = items[0];
+  }
 
-  // List<DropdownMenuItem> items = List.generate(4, (int index){return DropdownMenuItem(value:"item$index", child: Text("Item$index"));});
+  List<DropdownMenuItem<dynamic>> itemList = List.generate(4, (int index) {
+    return DropdownMenuItem(value: "item$index", child: Text("Item$index"));
+  });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +29,33 @@ class _DropDownPageState extends State<DropDownPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("Drop Down Example Page"),
-              // DropdownButton(value: selected, onChanged: (newValue) {}),
+              DropdownButton<String>(
+                value: selected,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selected = newValue!;
+                  });
+                },
+                items: [
+                  DropdownMenuItem<String>(
+                    value: "item1",
+                    child: Text("item 1"),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: "item 2",
+                    child: Text("item 2"),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: "item 3",
+                    child: Text("item 3"),
+                  ),
+                  DropdownMenuItem<String>(
+                    value: "item 4",
+                    child: Text("item 4"),
+                  ),
+                ],
+              ),
+              Text("You selected : $selected")
             ],
           ),
         ),
