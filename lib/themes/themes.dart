@@ -11,6 +11,7 @@ class CustomTheme{
       ),
       centerTitle: true
     ),
-    colorScheme: ColorScheme.light().copyWith(primary: Colors.deepPurple)
+    colorScheme: ColorScheme.light().copyWith(primary: Colors.deepPurple),
+    primaryColor: Colors.deepPurple
   );
 }
