@@ -21,19 +21,26 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _accepted = true;
   final _today = DateTime.now();
   final _dobController = TextEditingController();
+  final _timeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  double value = 10.0;
+  late TimeOfDay _selecTime;
+  final double _height = 60;
 
   @override
   void initState() {
     super.initState();
     _country = List.generate(_countries.length, (index) {
       return DropdownMenuItem(
-        child: Text("${_countries[index]}"),
         value: _countries[index],
+        child: Text(_countries[index]),
       );
     });
     _selectedCountry = _countries[0];
     _dobController.text = DateFormat('MMM d, y').format(_today);
+    _gender = "Male";
+    _selecTime = TimeOfDay(hour: _today.hour, minute: _today.minute);
+    _timeController.text = DateFormat('jm').format(_today);
   }
 
   @override
@@ -58,67 +65,77 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Column(
                     children: [
                       //User name field
-                      TextFormField(
-                        validator: (value) {
-                          if (value==null || value.isEmpty) {
-                            return "Field is empty";
-                          }
-                          return null;
-                        },
-                        controller: _usernameController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Username",
+                      SizedBox(
+                        height: _height,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Field is empty";
+                            }
+                            return null;
+                          },
+                          controller: _usernameController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Username",
+                          ),
                         ),
                       ),
                       SizedBox(height: 10),
                       //Email field
-                      TextFormField(
-                        validator: (value) {
-                          if(value==null || value.isEmpty){
-                            return "Field is empty";
-                          }
-                          else{
-                            final RegExp emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
-                            if(emailRegex.hasMatch(value)){
-                              return null;
+                      SizedBox(
+                        height: _height,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Field is empty";
+                            } else {
+                              final RegExp emailRegex = RegExp(
+                                r'^[^@]+@[^@]+\.[^@]+$',
+                              );
+                              if (emailRegex.hasMatch(value)) {
+                                return null;
+                              }
+                              return "Enter a valid email";
                             }
-                            return "Enter a valid email";
-                          }
-                        },
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Email",
+                          },
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Email",
+                          ),
+                          keyboardType: TextInputType.emailAddress,
                         ),
-                        keyboardType: TextInputType.emailAddress,
                       ),
                       SizedBox(height: 10),
 
                       //Password field
-                      TextFormField(
-                        validator: (value) {
-                          if(value==null || value.isEmpty){
-                            return "Field is empty";
-                          }
-                          else{
-                            final RegExp passwordRegex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
-                            if(value.length < 6){
-                              return "Password should atleast 6 characters";
+                      SizedBox(
+                        height: _height,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Field is empty";
+                            } else {
+                              final RegExp passwordRegex = RegExp(
+                                r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
+                              );
+                              if (value.length < 6) {
+                                return "Password should atleast 6 characters";
+                              } else if (!passwordRegex.hasMatch(value)) {
+                                return "Enter a strong password";
+                              }
                             }
-                            else if(!passwordRegex.hasMatch(value)){
-                              return "Enter a strong password";
-                            }
-                          }
-                          return null;
-                        },
-                        controller: _passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Password",
+                            return null;
+                          },
+                          controller: _passwordController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Password",
+                          ),
+                          keyboardType: TextInputType.visiblePassword,
                         ),
-                        keyboardType: TextInputType.visiblePassword,
                       ),
 
                       //Gender selection
@@ -132,7 +149,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               value: "Male",
                               groupValue: _gender,
                               onChanged: (value) {
-                                setState(() {
+                                setState(() {  
                                   _gender = value;
                                 });
                               },
@@ -155,27 +172,30 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       //#TODO
                       //D O B
-                      TextField(
-                        controller: _dobController,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: "You Date of Birth",
+                      SizedBox(
+                        height: _height,
+                        child: TextField(
+                          controller: _dobController,
+                          readOnly: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: "You Date of Birth",
+                          ),
+                          onTap: () async {
+                            DateTime? dob = await showDatePicker(
+                              context: context,
+                              firstDate: DateTime(1990),
+                              lastDate: _today,
+                            );
+                            if (dob != null) {
+                              setState(() {
+                                _dobController.text = DateFormat(
+                                  'MMM d, y',
+                                ).format(dob);
+                              });
+                            }
+                          },
                         ),
-                        onTap: () async {
-                          DateTime? dob = await showDatePicker(
-                            context: context,
-                            firstDate: DateTime(1990),
-                            lastDate: _today,
-                          );
-                          if (dob != null) {
-                            setState(() {
-                              _dobController.text = DateFormat(
-                                'MMM d, y',
-                              ).format(dob);
-                            });
-                          }
-                        },
                       ),
 
                       //Country dropdown
@@ -193,24 +213,27 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
 
                       //Phone number Field
-                      TextFormField(
-                        validator: (value) {
-                          if(value == null || value.isEmpty){
-                            return "Field is empty";
-                          }
-                          else{
-                            final RegExp phoneRegex = RegExp(r'^\d{10}$');
-                            if(!phoneRegex.hasMatch(value)){
-                              return "Enter a valid phone number";
+                      SizedBox(
+                        height: _height,
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Field is empty";
+                            } else {
+                              final RegExp phoneRegex = RegExp(r'^\d{10}$');
+                              if (!phoneRegex.hasMatch(value)) {
+                                return "Enter a valid phone number";
+                              }
                             }
-                          }
-                        },
-                        controller: _phoneController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Phone number",
+                            return null;
+                          },
+                          controller: _phoneController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: "Phone number",
+                          ),
+                          keyboardType: TextInputType.number,
                         ),
-                        keyboardType: TextInputType.number,
                       ),
 
                       //Subscribed switch
@@ -232,6 +255,42 @@ class _ProfilePageState extends State<ProfilePage> {
                         tristate: false,
                       ),
 
+                      //slider
+                      SizedBox(
+                        child: Column(
+                          children: [
+                            Text("Select your weight."),
+                            Slider(
+                              value: value,
+                              min: 0,
+                              max: 100,
+                              label: "${value.toInt()}",
+                              divisions: 100,
+                              onChanged: (newValue) =>
+                                  setState(() => value = newValue),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: _height,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                          ),
+                          controller: _timeController,
+                          readOnly: true,
+                          cursorHeight: 3,
+                          onTap: ()async{
+                            TimeOfDay? time = await showTimePicker(context: context, initialTime: _selecTime);
+                            if(time!=null){
+                              setState(() => _timeController.text = time.format(context),);
+                            }
+                          },
+                        ),
+                      ),
+
                       //Submit Button
                       ElevatedButton(
                         onPressed: () {
@@ -242,7 +301,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 return AlertDialog(
                                   title: Text("User Details"),
                                   content: Text(
-                                    "Username : ${_usernameController.text}\nEmail : ${_emailController.text}\nPassword : ${_passwordController.text}\nGender : $_gender\nCountry : $_selectedCountry\nDOB : ${_dobController.text}\nSubscribed? : ${_isSubscribed ? "Subscribed" : "Not Subscribed"}\nTerms accepted?: ${_accepted ? "Accepted" : "Not Accepted"}",
+                                  "Username : ${_usernameController.text}\nEmail : ${_emailController.text}\nPassword : ${_passwordController.text}\nGender : $_gender\nCountry : $_selectedCountry\nDOB : ${_dobController.text}\nSubscribed? : ${_isSubscribed ? "Subscribed" : "Not Subscribed"}\nTerms accepted?: ${_accepted ? "Accepted" : "Not Accepted"}\nweight : $value\nTime: ${_timeController.text}",
                                   ),
                                   actions: [
                                     TextButton(
